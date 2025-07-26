@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import datetime
 import requests
 
 
@@ -21,9 +20,10 @@ def fetch_headlines(url="https://news.ycombinator.com/", limit=10):
                 headlines.append({
                     'title': title_tag.text,
                     'link': title_tag['href'], 
-                    'score': int(span[1].find("span", class_="score").text.split()[0]),
+                    'score': span[1].find("span", class_="score").text.split()[0],
                     'author': span[1].find("a", class_="hnuser").text,
-                    'date': datetime.datetime.fromisoformat(span[1].find("span", class_="age")['title'].split()[0])})
+                    'date': span[1].find("span", class_="age")['title'].split()[0]
+                    })
         except:
             print("There was an error processing headlines. Please try again later.")
             return []
