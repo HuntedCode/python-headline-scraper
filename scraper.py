@@ -1,28 +1,32 @@
+from bs4 import BeautifulSoup
 import datetime
 import requests
-from bs4 import BeautifulSoup
+
 
 def fetch_headlines(url="https://news.ycombinator.com/", limit=10):
     """Fetches headlines from param URL with param limit. Defaults to ycombinator.com & limit of 10."""
 
-    response = requests.get(url)
+    response = requests.get(url, headers={"User-Agent": "PythonPracticeScraper/1.0"})
 
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         title_spans = soup.find_all("span", class_="titleline", limit=limit)
         subline_spans = soup.find_all("span", class_="subline", limit=limit)
+        zipped_spans = list(zip(title_spans, subline_spans))
 
-        headlines = []
-        for span in title_spans:
-            tag = span.find("a")
-            headlines.append({'title': tag.text, 'link': tag['href']})
-        
-        index = 0
-        for span in subline_spans:
-            headlines[index]['score'] = int(span.find("span", class_="score").text.split()[0])
-            headlines[index]['author'] = span.find("a", class_="hnuser").text
-            headlines[index]['date'] = datetime.datetime.fromisoformat(span.find("span", class_="age")['title'].split()[0])
-            index += 1
+        try:
+            headlines = []
+            for span in zipped_spans:
+                title_tag = span[0].find("a")
+                headlines.append({
+                    'title': title_tag.text,
+                    'link': title_tag['href'], 
+                    'score': int(span[1].find("span", class_="score").text.split()[0]),
+                    'author': span[1].find("a", class_="hnuser").text,
+                    'date': datetime.datetime.fromisoformat(span[1].find("span", class_="age")['title'].split()[0])})
+        except:
+            print("There was an error processing headlines. Please try again later.")
+            return []
 
         return headlines
     else:
