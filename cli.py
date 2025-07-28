@@ -34,6 +34,9 @@ def process_command(command: str, feed: HeadlineFeed):
                 help_command()
             case "load":
                 load_command(feed)
+            case "refresh":
+                feed = refresh_feed()
+                view_command(feed)
             case "save":
                 save_command(feed)
             case "sort":

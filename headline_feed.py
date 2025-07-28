@@ -23,16 +23,23 @@ class HeadlineFeed:
                 self._feed.append(headline)
 
     def load_from_file(self):
-        """Loads file and adds saved headlines to current feed. Does not change origin."""
-        
-        filename = str(input("Enter name of file to load: ")) + ".json"
-        if os.path.isfile(filename):
-            with open(filename, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-                for d in data:
-                    self._feed.append(Headline(d))
+        """Loads file and merges or replaces current feed with saved headlines. Does not change origin."""
+
+        merge_str = str(input("Would you like to append current headline list or replace it? ('a' or 'r'): ")).lower()
+        if merge_str in ('a', 'r'):
+            if merge_str == 'r':
+                self._feed.clear()
+            
+            filename = str(input("Enter name of file to load: ")) + ".json"
+            if os.path.isfile(filename):
+                with open(filename, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    for d in data:
+                        self._feed.append(Headline(d))
+            else:
+                print("That file does not exist. Check your spelling and try again.")
         else:
-            print("That file does not exist. Check your spelling and try again.")
+            print("That is not valid input. Aborting load...")
 
     def print_feed(self):
         """Outputs sorted/filtered headline list to command line."""
