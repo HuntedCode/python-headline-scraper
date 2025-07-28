@@ -11,16 +11,26 @@ A command-line tool that scrapes top headlines from Hacker News (news.ycombinato
 
 ## Installation
 1. Clone the repository:
-- git clone https://github.com/HuntedCode/python-headline-scraper.git
-- cd python-headline-scraper
+
+```
+git clone https://github.com/HuntedCode/python-headline-scraper.git
+cd python-headline-scraper
+```
 
 2. Install dependencies (Python 3.8+ required):
-- pip install requests beautifulsoup4
+
+```
+pip install requests beautifulsoup4
+```
+
 (No other external libraries needed.)
 
 ## Usage
 Run the app from the command line:
-- python main.py
+
+```
+python main.py
+```
 
 Once running, you'll see the initial feed. Use these commands:
 - `view`: Display the current feed.
